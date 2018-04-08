@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference
+        android:defaultValue="@string/default_zip_code"
+        android:hint="ZIP CODE"
+        android:inputType="number"
+        android:key="@string/location_key"
+        android:singleLine="true"
+
+        android:title="@string/pref_location" />
+
+    <ListPreference
+        android:title="@string/temp_unit"
+        android:entries="@array/temp_unit_name"
+        android:entryValues="@array/temp_unit_values"
+        android:key="@string/unit_preference"/>
+
+
+</PreferenceScreen>
