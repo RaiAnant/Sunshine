@@ -13,7 +13,8 @@
         android:title="@string/temp_unit"
         android:entries="@array/temp_unit_name"
         android:entryValues="@array/temp_unit_values"
-        android:key="@string/unit_preference"/>
+        android:key="@string/unit_preference"
+        android:defaultValue="metric"/>
 
 
 </PreferenceScreen>

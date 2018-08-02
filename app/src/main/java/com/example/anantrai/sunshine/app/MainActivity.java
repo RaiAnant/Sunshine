@@ -1,5 +1,6 @@
 package com.example.anantrai.sunshine.app;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -14,10 +15,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-public class MainActivity extends AppCompatActivity {
+
+public class MainActivity extends AppCompatActivity implements MainActivityFragment.Callback{
+    private final String FORECASTFRAGMENT_TAG = "FFTAG";
+    private static final String DETAILFRAGMENT_TAG = "DFTAG";
+
+    private String mLocation;
+    private boolean mTwoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mLocation = Utility.getPreferredLocation(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -31,6 +39,55 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        if(findViewById(R.id.detail_fragment) != null){
+            mTwoPane = true;
+            if(savedInstanceState==null){
+                getSupportFragmentManager().beginTransaction().replace(R.id.detail_fragment,new BlankFragment(),DETAILFRAGMENT_TAG).commit();
+
+            }
+
+        } else{
+            mTwoPane = false;
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        String location = Utility.getPreferredLocation(this);
+
+        if(location!=null && !location.equals(mLocation)) {
+            MainActivityFragment ff = (MainActivityFragment)getSupportFragmentManager().findFragmentById(R.id.main_activity_fragment);
+            if(ff!=null) {
+                ff.onLocationChanged();
+            }
+            BlankFragment bf =(BlankFragment)getSupportFragmentManager().findFragmentByTag(DETAILFRAGMENT_TAG);
+            if( null != bf){
+                bf.onLocationChanged(location);
+            }
+            mLocation = location;
+        }
+    }
+
+
+    @Override
+    public void onItemSelected(Uri contentUri){
+        if(mTwoPane){
+            Bundle args = new Bundle();
+            args.putParcelable(BlankFragment.DETAIL_URI,contentUri);
+
+            BlankFragment fragment = new BlankFragment();
+            fragment.setArguments(args);
+
+            getSupportFragmentManager().beginTransaction().replace(R.id.detail_fragment,fragment,DETAILFRAGMENT_TAG).commit();
+        }else{
+            Intent intent = new Intent(this,DetailActivity.class).setData(contentUri);
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -65,5 +122,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public boolean isTwoPane(){
+        return mTwoPane;
     }
 }

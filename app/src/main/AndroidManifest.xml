@@ -31,11 +31,16 @@
                 android:value="com.example.anantrai.sunshine.app.MainActivity" />
         </activity>
         <activity android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings">
+            android:label="@string/title_activity_settings"
+            android:theme="@style/SettingsTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.anantrai.sunshine.app.MainActivity" />
         </activity>
+        <provider
+            android:authorities="com.example.anantrai.sunshine.app"
+            android:name=".data.WeatherProvider"
+            />
     </application>
 
 </manifest>

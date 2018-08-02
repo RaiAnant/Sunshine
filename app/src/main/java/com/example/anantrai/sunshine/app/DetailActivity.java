@@ -33,14 +33,13 @@ public class DetailActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        Intent intent=getIntent();
-        Bundle weatherData=new Bundle();
-        weatherData.putString("weather",intent.getStringExtra(Intent.EXTRA_TEXT));
-        BlankFragment fragment=new BlankFragment();
-        fragment.setArguments(weatherData);
-        FragmentTransaction ft=getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.detail_fragment,fragment);
-        ft.commit();
+        if(savedInstanceState == null){
+            Bundle arguments = new Bundle();
+            arguments.putParcelable(BlankFragment.DETAIL_URI,getIntent().getData());
+            BlankFragment   fragment = new BlankFragment();
+            fragment.setArguments(arguments);
+            getSupportFragmentManager().beginTransaction().add(R.id.detail_fragment,fragment).commit();
+        }
     }
 
     @Override
